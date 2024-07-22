@@ -96,7 +96,7 @@
         <p id="win_message"></p>
       </div>
 
-      <p id="next_player_button" onclick="modalClose(win)">次のプレイヤーへ</p>
+      <p class="next_player_button" onclick="modalClose(win)">次のプレイヤーへ</p>
 
     </div>
   </div>
@@ -108,7 +108,7 @@
         <p id="lose_message"></p>
       </div>
 
-      <p id="next_player_button" onclick="modalClose(lose)">次のプレイヤーへ</p>
+      <p class="next_player_button" onclick="modalClose(lose)">次のプレイヤーへ</p>
 
     </div>
   </div>
@@ -120,7 +120,7 @@
         <p id="draw_message"></p>
       </div>
 
-      <p id="aiko_button" onclick="modalClose(draw)">もう１回</p>
+      <p class="aiko_button" onclick="modalClose(draw)">もう１回</p>
 
     </div>
   </div>
@@ -150,6 +150,8 @@
   let setIntervalID1 = "";
   let setIntervalID2 = "";
   let setIntervalID3 = "";
+  let result1 = "";
+  let result2 = "";
 
 
   // データ取得
@@ -237,7 +239,6 @@
         $("#gu_btn").off("click");
         $("#gu_btn").on("click", function(){
           let player_hands = 1;
-          let result1 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -276,7 +277,6 @@
         $("#cho_btn").off("click");
         $("#cho_btn").on("click", function(){
           let player_hands = 2;
-          let result1 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -314,7 +314,6 @@
         $("#par_btn").off("click");
         $("#par_btn").on("click", function(){
           let player_hands = 3;
-          let result1 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -352,19 +351,19 @@
       });
 
       if(result1 ==0){ 
-        $(function(){
-          $(".PC_hands img:not(:first-child)").hide();
-          setIntervalID3 = setInterval(function() {
-            $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
-          },200);
        
-          //あいこの場合
-          $("#aiko_button").on("click", function(){
+        //あいこの場合
+        $(".aiko_button").on("click", function(){
+          $(function(){
+            $(".PC_hands img:not(:first-child)").hide();
+            setIntervalID3 = setInterval(function() {
+              $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+            },200);
+
 
             $("#gu_btn").off("click");
             $("#gu_btn").on("click", function(){
               let player_hands = 1;
-              let result1 = "";
               // 出した手の画像を表示
               clearInterval(setIntervalID3);
               if(PC_hand == 1){
@@ -403,7 +402,6 @@
             $("#cho_btn").off("click");
             $("#cho_btn").on("click", function(){
               let player_hands = 2;
-              let result1 = "";
               // 出した手の画像を表示
               clearInterval(setIntervalID3);
               if(PC_hand == 1){
@@ -441,7 +439,6 @@
             $("#par_btn").off("click");
             $("#par_btn").on("click", function(){
               let player_hands = 3;
-              let result1 = "";
               // 出した手の画像を表示
               clearInterval(setIntervalID3);
               if(PC_hand == 1){
@@ -487,8 +484,8 @@
   });
   
   //2回目以降
-  $("#next_player_button").off("click");
-  $("#next_player_button").on("click", function(){
+  $(".next_player_button").off("click");
+  $(".next_player_button").on("click", function(){
     
     let player = num_of_play%num_of_players;
     $("#player_turn").html("「" + player_name[player] + "」" + "の番だよ～、シャッフルスタートしてね");
@@ -516,6 +513,7 @@
         setIntervalID3 = setInterval(function() {
           $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
         },200);
+      // });
 
       let table_content = "";
       let threshold1 = "";
@@ -558,7 +556,6 @@
         $("#gu_btn").off("click");
         $("#gu_btn").on("click", function(){
           let player_hands = 1;
-          let result2 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -598,7 +595,6 @@
         $("#cho_btn").off("click");
         $("#cho_btn").on("click", function(){
           let player_hands = 2;
-          let result2 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -638,7 +634,6 @@
         $("#par_btn").off("click");
         $("#par_btn").on("click", function(){
           let player_hands = 3;
-          let result2 = "";
           // 出した手の画像を表示
           clearInterval(setIntervalID3);
           if(PC_hand == 1){
@@ -677,18 +672,16 @@
         });  
       
         if(result2 == 0){
-          $(function(){
-            $(".PC_hands img:not(:first-child)").hide();
-            setIntervalID3 = setInterval(function() {
-              $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
-            },200);
+          $(".aiko_button").on("click", function(){
+            $(function(){
+              $(".PC_hands img:not(:first-child)").hide();
+              setIntervalID3 = setInterval(function() {
+                $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+              },200);
 
-            $("#aiko_button").on("click", function(){
-          
               $("#gu_btn").off("click");
               $("#gu_btn").on("click", function(){
                 let player_hands = 1;
-                let result2 = "";
                 // 出した手の画像を表示
                 clearInterval(setIntervalID3);
                 if(PC_hand == 1){
@@ -728,7 +721,6 @@
               $("#cho_btn").off("click");
               $("#cho_btn").on("click", function(){
                 let player_hands = 2;
-                let result2 = "";
                 // 出した手の画像を表示
                 clearInterval(setIntervalID3);
                 if(PC_hand == 1){
@@ -768,7 +760,6 @@
               $("#par_btn").off("click");
               $("#par_btn").on("click", function(){
                 let player_hands = 3;
-                let result2 = "";
                 // 出した手の画像を表示
                 clearInterval(setIntervalID3);
                 if(PC_hand == 1){

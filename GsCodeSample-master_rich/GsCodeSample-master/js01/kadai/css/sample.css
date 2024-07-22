@@ -525,7 +525,7 @@ th{
     font-weight: 600;
 }
 
-#next_player_button{
+.next_player_button{
     font-size: 40px;
     font-weight: 600;
     width: 30%;
@@ -543,11 +543,11 @@ th{
     align-items: center;
 }
 
-#next_player_button:hover{
+.next_player_button:hover{
     box-shadow: 0 2px 2px rgba(0,0,0,0.2);
 }
 
-#aiko_button{
+.aiko_button{
     font-size: 40px;
     font-weight: 600;
     width: 30%;
@@ -565,6 +565,6 @@ th{
     align-items: center;
 }
 
-#aiko_button:hover{
+.aiko_button:hover{
     box-shadow: 0 2px 2px rgba(0,0,0,0.2);
 }
