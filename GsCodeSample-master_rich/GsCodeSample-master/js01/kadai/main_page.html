@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<script src="./index.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>みんなでじゃんけんゲーム</title>
+</head>
+<body>
+
+<header>
+  <p id="player_turn"></p>
+</header>
+
+<main>
+  <div class="first_section">
+    <table>
+      <tr class="table_title">
+        <th>あなたの出し手</th>
+        <th>勝つ確率</th>
+        <th>勝った時のご褒美</th>
+        <th>負けた時の罰ゲーム</th>
+      </tr>
+  
+      <tr>
+        <th>グー</th>
+        <td id="possibility_gu">？％</td>
+        <td id="reward_gu">？</td>
+        <td id="penalty_gu">？</td>
+      </tr>
+        
+      <tr>
+        <th>チョキ</th>
+        <td id="possibility_cho">？％</td>
+        <td id="reward_cho">？</td>
+        <td id="penalty_cho">？</td>
+      </tr>
+  
+      <tr>
+        <th>パー</th>
+        <td id="possibility_par">？％</td>
+        <td id="reward_par">？</td>
+        <td id="penalty_par">？</td>
+      </tr>
+    </table>
+
+    <div class="roulette_button" onclick="clearInterval(setIntervalID1);clearInterval(setIntervalID2)">
+      <p>シャッフルスタート</p>
+    </div>
+
+  </div>  
+
+  <div class="second_section">
+    
+    <div class="PC_character">
+      <div class="PC_character_img">
+        <img id="Hachiware" src="./img/hachiware.jpg" alt="">
+        <img id="Hangyodon" src="./img/hangyodon.png" alt="">
+        <img id="Bossbaby" src="./img/bossbaby.jpg" alt="">
+        <img id="Doraemon" src="./img/doraemon.jpg" alt="">
+        <img id="Daffy" src="./img/daffy.jpg" alt="">
+      </div>
+     
+      <div class="PC_character_name">
+        <p>ハチワレ</p>
+        <p>ハンギョドン</p>
+        <p>ボスベイビー</p>
+        <p>ドラえもん</p>
+        <p>ダッフィー</p>
+      </div>
+
+    </div>
+
+    <div class="PC_hands">
+      <img id="gu" src="./img/gu.jpg" alt="">
+      <img id="cho" src="./img/cho.jpg" alt="">
+      <img id="par" src="./img/par.jpg" alt="">
+    </div>
+  </div>
+ 
+  <div id="selection_player_hands">
+    <ul>
+      <li id="gu_btn"><img src="./img/gu.jpg" alt=""></li>
+      <li id="cho_btn"><img src="./img/cho.jpg" alt=""></li>
+      <li id="par_btn"><img src="./img/par.jpg" alt=""></li>
+    </ul>
+  </div>
+    
+   <!-- 結果画像 -->
+  <div id="win">
+    <div id="result_content_win">
+      <div id="content_win">
+        <img src="./img/Win.jpeg" alt="">
+        <p id="win_message"></p>
+      </div>
+
+      <p id="next_player_button" onclick="modalClose(win)">次のプレイヤーへ</p>
+
+    </div>
+  </div>
+
+  <div id="lose">
+    <div id="result_content_lose">
+      <div id="content_lose">
+        <img src="./img/Lose.jpeg" alt="">
+        <p id="lose_message"></p>
+      </div>
+
+      <p id="next_player_button" onclick="modalClose(lose)">次のプレイヤーへ</p>
+
+    </div>
+  </div>
+
+  <div id="draw">
+    <div id="result_content_draw">
+      <div id="content_draw">
+        <img src="./img/Draw.jpeg" alt="">
+        <p id="draw_message"></p>
+      </div>
+
+      <p id="aiko_button" onclick="modalClose(draw)">もう１回</p>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer_button">
+    <a href="./behaviour_config_page.html" id="back_button">戻る</a>
+  </div>
+
+</footer>
+<script>
+  
+  // グローバル変数定義
+  let player_name = [];
+  let penalty = [];
+  let reward = [];
+  let num_of_players = "";
+  let num_of_play = 1;
+  let reward_gu = "";
+  let reward_cho = "";
+  let reward_par = "";
+  let penalty_gu = "";
+  let penalty_cho = "";
+  let penalty_par = "";
+  let setIntervalID1 = "";
+  let setIntervalID2 = "";
+  let setIntervalID3 = "";
+
+
+  // データ取得
+  document.addEventListener('DOMContentLoaded', function () {
+    player_name[0] = localStorage.getItem("player_name1");
+    player_name[1] = localStorage.getItem("player_name2");
+    player_name[2] = localStorage.getItem("player_name3");
+    player_name[3] = localStorage.getItem("player_name4");
+    player_name[4] = localStorage.getItem("player_name5");
+    player_name[5] = localStorage.getItem("player_name6");
+    penalty[0] = localStorage.getItem("penalty1");
+    penalty[1] = localStorage.getItem("penalty2");
+    penalty[2] = localStorage.getItem("penalty3");
+    reward[0] = localStorage.getItem("reward1");
+    reward[1] = localStorage.getItem("reward2");
+    reward[2] = localStorage.getItem("reward3");
+
+    num_of_players = count(player_name, 6);
+
+    $("#player_turn").html("「" + player_name[0] + "」" + "の番だよ～、シャッフルスタートしてね");
+
+    //PCキャラクターシャッフル
+    $(function(){
+      $(".PC_character_img img:not(:first-child)").hide();
+      setIntervalID1 = setInterval(function() {
+        $(".PC_character_img img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_character_img");
+      },200);
+
+    // }); 
+
+    // $(function(){
+      $(".PC_character_name p:not(:first-child)").hide();
+      setIntervalID2 = setInterval(function() {
+        $(".PC_character_name p:first-child").fadeOut(50).next("p").fadeIn(50).end().appendTo(".PC_character_name");
+      },200);
+
+    // }); 
+
+    //PCの出し手シャッフル
+    // $(function(){
+
+      $(".PC_hands img:not(:first-child)").hide();
+      setIntervalID3 = setInterval(function() {
+        $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+      },200);
+      
+      let table_content = "";
+      let threshold1 = "";
+      let threshold2 = "";
+      let PC_hand = "";
+      let gu_win = "";
+      let cho_win = "";
+      let par_win = "";
+
+      $(".roulette_button").off("click");
+      $(".roulette_button").on("click", function(){
+        table_content = table_complete();
+        threshold1 = table_content[0];
+        threshold2 = table_content[1];
+        PC_hand = table_content[2];
+        gu_win = threshold2-threshold1-1;
+        cho_win = 100-threshold2+1;
+        par_win = threshold1;
+
+        $("#possibility_gu").html(gu_win+"%" );
+        $("#possibility_cho").html(cho_win+"%");
+        $("#possibility_par").html(par_win+"%");
+
+        let reward_num = random();
+        let penalty_num = random();
+
+        $("#reward_gu").html(reward[reward_num[0]]);
+        reward_gu = reward[reward_num[0]];
+        $("#reward_cho").html(reward[reward_num[1]]);
+        reward_cho = reward[reward_num[1]];
+        $("#reward_par").html(reward[reward_num[2]]);
+        reward_par = reward[reward_num[2]];
+        $("#penalty_gu").html(penalty[penalty_num[0]]);
+        penalty_gu = penalty[penalty_num[0]];
+        $("#penalty_cho").html(penalty[penalty_num[1]]);
+        penalty_cho = penalty[penalty_num[1]];
+        $("#penalty_par").html(penalty[penalty_num[2]]);
+        penalty_par = penalty[penalty_num[2]];
+        
+        $("#gu_btn").off("click");
+        $("#gu_btn").on("click", function(){
+          let player_hands = 1;
+          let result1 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+          
+          // 勝ち負けの判断
+          result1 = player_hands - PC_hand;
+          if(result1 == 0){
+            modalOpen(draw);
+          }
+          if(result1 == -1 || result1 == 2){
+            $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_gu);
+            modalOpen(win);
+          }
+          if(result1 == 1 || result1 == -2){
+            $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_gu);
+            modalOpen(lose);
+          }
+          
+          
+        });
+        
+        $("#cho_btn").off("click");
+        $("#cho_btn").on("click", function(){
+          let player_hands = 2;
+          let result1 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+
+          // 勝ち負けの判断
+          result1 = player_hands - PC_hand;
+          if(result1 == 0){
+            modalOpen(draw);
+          }
+          if(result1 == -1 || result1 == 2){
+            $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_cho);
+            modalOpen(win);
+          }
+          if(result1 == 1 || result1 == -2){
+            $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_cho);
+            modalOpen(lose);
+          }
+          
+        });  
+        
+        $("#par_btn").off("click");
+        $("#par_btn").on("click", function(){
+          let player_hands = 3;
+          let result1 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+
+
+          // 勝ち負けの判断
+          result1 = player_hands - PC_hand;
+          if(result1 == 0){
+            modalOpen(draw);
+          }
+          if(result1 == -1 || result1 == 2){
+            $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_par);
+            modalOpen(win);
+          }
+          if(result1 == 1 || result1 == -2){
+            $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_par);
+            modalOpen(lose);
+          }
+          
+        });  
+      });
+
+      if(result1 ==0){ 
+        $(function(){
+          $(".PC_hands img:not(:first-child)").hide();
+          setIntervalID3 = setInterval(function() {
+            $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+          },200);
+       
+          //あいこの場合
+          $("#aiko_button").on("click", function(){
+
+            $("#gu_btn").off("click");
+            $("#gu_btn").on("click", function(){
+              let player_hands = 1;
+              let result1 = "";
+              // 出した手の画像を表示
+              clearInterval(setIntervalID3);
+              if(PC_hand == 1){
+                $("#gu").show();
+                $("#cho").hide();
+                $("#par").hide();
+              }
+              if(PC_hand == 2){
+                $("#gu").hide();
+                $("#cho").show();
+                $("#par").hide();
+              }
+              if(PC_hand == 3){
+                $("#gu").hide();
+                $("#cho").hide();
+                $("#par").show();
+              }
+              
+              // 勝ち負けの判断
+              result1 = player_hands - PC_hand;
+              if(result1 == 0){
+                modalOpen(draw);
+              }
+              if(result1 == -1 || result1 == 2){
+                $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_gu);
+                modalOpen(win);
+              }
+              if(result1 == 1 || result1 == -2){
+                $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_gu);
+                modalOpen(lose);
+              }
+              
+              
+            });
+            
+            $("#cho_btn").off("click");
+            $("#cho_btn").on("click", function(){
+              let player_hands = 2;
+              let result1 = "";
+              // 出した手の画像を表示
+              clearInterval(setIntervalID3);
+              if(PC_hand == 1){
+                $("#gu").show();
+                $("#cho").hide();
+                $("#par").hide();
+              }
+              if(PC_hand == 2){
+                $("#gu").hide();
+                $("#cho").show();
+                $("#par").hide();
+              }
+              if(PC_hand == 3){
+                $("#gu").hide();
+                $("#cho").hide();
+                $("#par").show();
+              }
+
+              // 勝ち負けの判断
+              result1 = player_hands - PC_hand;
+              if(result1 == 0){
+                modalOpen(draw);
+              }
+              if(result1 == -1 || result1 == 2){
+                $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_cho);
+                modalOpen(win);
+              }
+              if(result1 == 1 || result1 == -2){
+                $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_cho);
+                modalOpen(lose);
+              }
+              
+            });  
+            
+            $("#par_btn").off("click");
+            $("#par_btn").on("click", function(){
+              let player_hands = 3;
+              let result1 = "";
+              // 出した手の画像を表示
+              clearInterval(setIntervalID3);
+              if(PC_hand == 1){
+                $("#gu").show();
+                $("#cho").hide();
+                $("#par").hide();
+              }
+              if(PC_hand == 2){
+                $("#gu").hide();
+                $("#cho").show();
+                $("#par").hide();
+              }
+              if(PC_hand == 3){
+                $("#gu").hide();
+                $("#cho").hide();
+                $("#par").show();
+              }
+
+
+              // 勝ち負けの判断
+              result1 = player_hands - PC_hand;
+              if(result1 == 0){
+                modalOpen(draw);
+              }
+              if(result1 == -1 || result1 == 2){
+                $("#win_message").html("「" + player_name[0] + "」" +"のご褒美は、"+ reward_par);
+                modalOpen(win);
+              }
+              if(result1 == 1 || result1 == -2){
+                $("#lose_message").html("「" + player_name[0]+ "」" +"の罰ゲームは、"+ penalty_par);
+                modalOpen(lose);
+              }
+              
+            });  
+
+          });
+        });
+      }
+
+    
+    });
+
+  });
+  
+  //2回目以降
+  $("#next_player_button").off("click");
+  $("#next_player_button").on("click", function(){
+    
+    let player = num_of_play%num_of_players;
+    $("#player_turn").html("「" + player_name[player] + "」" + "の番だよ～、シャッフルスタートしてね");
+
+    //PCキャラクターシャッフル
+    $(function(){
+      $(".PC_character_img img:not(:first-child)").hide();
+      setIntervalID1 = setInterval(function() {
+        $(".PC_character_img img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_character_img");
+      },200);
+
+    // }); 
+
+    // $(function(){
+      $(".PC_character_name p:not(:first-child)").hide();
+      setIntervalID2 = setInterval(function() {
+        $(".PC_character_name p:first-child").fadeOut(50).next("p").fadeIn(50).end().appendTo(".PC_character_name");
+      },200);
+
+    // }); 
+
+    //PCの出し手シャッフル
+    // $(function(){
+      $(".PC_hands img:not(:first-child)").hide();
+        setIntervalID3 = setInterval(function() {
+          $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+        },200);
+
+      let table_content = "";
+      let threshold1 = "";
+      let threshold2 = "";
+      let PC_hand = "";
+      let gu_win = "";
+      let cho_win = "";
+      let par_win = "";
+
+      $(".roulette_button").off("click");
+      $(".roulette_button").on("click", function(){
+        table_content = table_complete();
+        threshold1 = table_content[0];
+        threshold2 = table_content[1];
+        PC_hand = table_content[2];
+        gu_win = threshold2-threshold1-1;
+        cho_win = 100-threshold2+1;
+        par_win = threshold1;
+
+        $("#possibility_gu").html(gu_win+"%" );
+        $("#possibility_cho").html(cho_win+"%");
+        $("#possibility_par").html(par_win+"%");
+
+        let reward_num = random();
+        let penalty_num = random();
+
+        $("#reward_gu").html(reward[reward_num[0]]);
+        reward_gu = reward[reward_num[0]];
+        $("#reward_cho").html(reward[reward_num[1]]);
+        reward_cho = reward[reward_num[1]];
+        $("#reward_par").html(reward[reward_num[2]]);
+        reward_par = reward[reward_num[2]];
+        $("#penalty_gu").html(penalty[penalty_num[0]]);
+        penalty_gu = penalty[penalty_num[0]];
+        $("#penalty_cho").html(penalty[penalty_num[1]]);
+        penalty_cho = penalty[penalty_num[1]];
+        $("#penalty_par").html(penalty[penalty_num[2]]);
+        penalty_par = penalty[penalty_num[2]];
+      
+        $("#gu_btn").off("click");
+        $("#gu_btn").on("click", function(){
+          let player_hands = 1;
+          let result2 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+          
+          // 勝ち負けの判断
+          result2 = player_hands - PC_hand;
+          if(result2 == 0){
+            modalOpen(draw);
+          }
+          if(result2 == -1 || result2 == 2){
+            $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_gu);
+            modalOpen(win);
+            num_of_play++;
+          }
+          if(result2 == 1 || result2 == -2){
+            $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_gu);
+            modalOpen(lose);
+            num_of_play++;
+          }
+          
+        });
+        
+        $("#cho_btn").off("click");
+        $("#cho_btn").on("click", function(){
+          let player_hands = 2;
+          let result2 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+
+          // 勝ち負けの判断
+          result2 = player_hands - PC_hand;
+          if(result2 == 0){
+            modalOpen(draw);
+          }
+          if(result2 == -1 || result2 == 2){
+            $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_cho);
+            modalOpen(win);
+            num_of_play++;
+          }
+          if(result2 == 1 || result2 == -2){
+            $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_cho);
+            modalOpen(lose);
+            num_of_play++;
+          }
+          
+        });  
+        
+        $("#par_btn").off("click");
+        $("#par_btn").on("click", function(){
+          let player_hands = 3;
+          let result2 = "";
+          // 出した手の画像を表示
+          clearInterval(setIntervalID3);
+          if(PC_hand == 1){
+            $("#gu").show();
+            $("#cho").hide();
+            $("#par").hide();
+          }
+          if(PC_hand == 2){
+            $("#gu").hide();
+            $("#cho").show();
+            $("#par").hide();
+          }
+          if(PC_hand == 3){
+            $("#gu").hide();
+            $("#cho").hide();
+            $("#par").show();
+          }
+
+
+          // 勝ち負けの判断
+          result2 = player_hands - PC_hand;
+          if(result2 == 0){
+            modalOpen(draw);
+          }
+          if(result2 == -1 || result2 == 2){
+            $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_par);
+            modalOpen(win);
+            num_of_play++;
+          }
+          if(result2 == 1 || result2 == -2){
+            $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_par);
+            modalOpen(lose);
+            num_of_play++;
+          }
+          
+        });  
+      
+        if(result2 == 0){
+          $(function(){
+            $(".PC_hands img:not(:first-child)").hide();
+            setIntervalID3 = setInterval(function() {
+              $(".PC_hands img:first-child").fadeOut(50).next("img").fadeIn(50).end().appendTo(".PC_hands");
+            },200);
+
+            $("#aiko_button").on("click", function(){
+          
+              $("#gu_btn").off("click");
+              $("#gu_btn").on("click", function(){
+                let player_hands = 1;
+                let result2 = "";
+                // 出した手の画像を表示
+                clearInterval(setIntervalID3);
+                if(PC_hand == 1){
+                  $("#gu").show();
+                  $("#cho").hide();
+                  $("#par").hide();
+                }
+                if(PC_hand == 2){
+                  $("#gu").hide();
+                  $("#cho").show();
+                  $("#par").hide();
+                }
+                if(PC_hand == 3){
+                  $("#gu").hide();
+                  $("#cho").hide();
+                  $("#par").show();
+                }
+                
+                // 勝ち負けの判断
+                result2 = player_hands - PC_hand;
+                if(result2 == 0){
+                  modalOpen(draw);
+                }
+                if(result2 == -1 || result2 == 2){
+                  $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_gu);
+                  modalOpen(win);
+                  num_of_play++;
+                }
+                if(result2 == 1 || result2 == -2){
+                  $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_gu);
+                  modalOpen(lose);
+                  num_of_play++;
+                }
+                
+              });
+              
+              $("#cho_btn").off("click");
+              $("#cho_btn").on("click", function(){
+                let player_hands = 2;
+                let result2 = "";
+                // 出した手の画像を表示
+                clearInterval(setIntervalID3);
+                if(PC_hand == 1){
+                  $("#gu").show();
+                  $("#cho").hide();
+                  $("#par").hide();
+                }
+                if(PC_hand == 2){
+                  $("#gu").hide();
+                  $("#cho").show();
+                  $("#par").hide();
+                }
+                if(PC_hand == 3){
+                  $("#gu").hide();
+                  $("#cho").hide();
+                  $("#par").show();
+                }
+
+                // 勝ち負けの判断
+                result = player_hands - PC_hand;
+                if(result2 == 0){
+                  modalOpen(draw);
+                }
+                if(result2 == -1 || result2 == 2){
+                  $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_cho);
+                  modalOpen(win);
+                  num_of_play++;
+                }
+                if(result2 == 1 || result2 == -2){
+                  $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_cho);
+                  modalOpen(lose);
+                  num_of_play++;
+                }
+                
+              });  
+              
+              $("#par_btn").off("click");
+              $("#par_btn").on("click", function(){
+                let player_hands = 3;
+                let result2 = "";
+                // 出した手の画像を表示
+                clearInterval(setIntervalID3);
+                if(PC_hand == 1){
+                  $("#gu").show();
+                  $("#cho").hide();
+                  $("#par").hide();
+                }
+                if(PC_hand == 2){
+                  $("#gu").hide();
+                  $("#cho").show();
+                  $("#par").hide();
+                }
+                if(PC_hand == 3){
+                  $("#gu").hide();
+                  $("#cho").hide();
+                  $("#par").show();
+                }
+
+
+                // 勝ち負けの判断
+                result2 = player_hands - PC_hand;
+                if(result2 == 0){
+                  modalOpen(draw);
+                }
+                if(result2 == -1 || result2 == 2){
+                  $("#win_message").html("「" + player_name[player] + "」" +"のご褒美は、"+ reward_par);
+                  modalOpen(win);
+                  num_of_play++;
+                }
+                if(result2 == 1 || result2 == -2){
+                  $("#lose_message").html("「" + player_name[player]+ "」" +"の罰ゲームは、"+ penalty_par);
+                  modalOpen(lose);
+                  num_of_play++;
+                }
+                
+              });  
+            });
+          });  
+        }  
+
+
+      });
+
+
+    });
+
+
+  });
+
+</script>
+</body>
+</html>

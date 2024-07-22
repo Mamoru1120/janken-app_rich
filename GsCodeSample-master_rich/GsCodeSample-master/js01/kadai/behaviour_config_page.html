@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<script src="./index.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>みんなでじゃんけんゲーム</title>
+</head>
+<body>
+
+<header>
+  <p>設定したい罰ゲームとご褒美を入力してね</p>
+</header>
+
+<main>
+  <div class="behaviour">
+    <div class="penalty">
+      <div id="penalty_behaviour_title">
+        <p>罰ゲーム</p>
+      </div>
+
+      <div id="behaviour_input">
+        <input id="penalty1" type="text" placeholder="罰ゲーム① ※最大15文字" maxlength="15">
+        <input id="penalty2" type="text" placeholder="罰ゲーム② ※最大15文字" maxlength="15">
+        <input id="penalty3" type="text" placeholder="罰ゲーム③ ※最大15文字" maxlength="15">
+      </div>
+
+    </div>
+
+    <d class="reward">
+      <div id="reward_behaviour_title">
+        <p>ご褒美</p>
+      </div>
+
+    <div id="behaviour_input">
+      <input id="reward1" type="text" placeholder="ご褒美① ※最大15文字" maxlength="15">
+      <input id="reward2" type="text" placeholder="ご褒美② ※最大15文字" maxlength="15">
+      <input id="reward3" type="text" placeholder="ご褒美③ ※最大15文字" maxlength="15">
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer_button">
+    <a href="./player_config_page.html" id="back_button">戻る</a>
+    <a href="./main_page.html" id="next_button">次へ</a>
+  </div>
+</footer>
+
+<script>
+
+  $("#next_button").on("click", function(){
+    let input1 = document.getElementById("penalty1").value;
+    let input2 = document.getElementById("penalty2").value;
+    let input3 = document.getElementById("penalty3").value;
+    let input4 = document.getElementById("reward1").value;
+    let input5 = document.getElementById("reward2").value;
+    let input6 = document.getElementById("reward3").value;
+    
+    localStorage.setItem("penalty1", input1);
+    localStorage.setItem("penalty2", input2);
+    localStorage.setItem("penalty3", input3);
+    localStorage.setItem("reward1", input4);
+    localStorage.setItem("reward2", input5);
+    localStorage.setItem("reward3", input6);  
+    });
+  
+ 
+  
+</script>
+</body>
+</html>

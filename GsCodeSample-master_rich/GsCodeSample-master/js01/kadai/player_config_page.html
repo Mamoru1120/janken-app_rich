@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<script src="./index.js"></script>
+<link rel="stylesheet" href="css/sample.css">
+<title>みんなでじゃんけんゲーム</title>
+</head>
+<body>
+
+<header>
+  <p>追加を押して、プレイヤーの名前を入力してね</p>
+  <p>※最大６人で遊べるよ</p>
+</header>
+
+<main>
+
+  <!-- プレイヤー名 -->
+  <div class="player_name_input_table">
+
+    <!-- プレイヤー1 -->
+    <div class="player_config" id="player_config1">
+      <div class="player_number">
+          <p>①</p>
+      </div>
+       
+      <div class="player_name">
+        <input id="player_name1" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+    <!-- プレイヤー2 -->
+    <div class="player_config" id="player_config2">
+        
+      <div class="player_addition" onclick="contentSwitch(player_addition_button2, player_number2)">
+        <div class="player_addition_button">
+          <p id="player_addition_button2">追加</p>
+        </div>
+      
+        <div class="player_number_addition">
+          <p id="player_number2">②</p>
+        </div>
+      </div>
+       
+      <div class="player_name_addition">
+        <input id="player_name2" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+    <!-- プレイヤー3 -->
+    <div class="player_config" id="player_config3">
+
+      <div class="player_addition" onclick="contentSwitch(player_addition_button3, player_number3)">
+        <div class="player_addition_button">
+          <p id="player_addition_button3">追加</p>
+        </div>
+        
+        <div class="player_number_addition">
+          <p id="player_number3">③</p>
+        </div>
+      </div>
+       
+      <div class="player_name_addition">
+        <input id="player_name3" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+    <!-- プレイヤー4 -->
+    <div class="player_config" id="player_config4">
+
+      <div class="player_addition" onclick="contentSwitch(player_addition_button4, player_number4)">
+        <div class="player_addition_button">
+          <p id="player_addition_button4">追加</p>
+        </div>
+        
+        <div class="player_number_addition">
+          <p id="player_number4">④</p>
+        </div>
+      </div>
+       
+      <div class="player_name_addition">
+        <input id="player_name4" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+    <!-- プレイヤー5 -->
+    <div class="player_config" id="player_config5" onclick="contentSwitch(player_addition_button5, player_number5)">
+
+      <div class="player_addition">
+        <div class="player_addition_button">
+          <p id="player_addition_button5">追加</p>
+        </div>
+        
+        <div class="player_number_addition">
+          <p id="player_number5">⑤</p>
+        </div>
+      </div>
+
+      <div class="player_name_addition">
+        <input id="player_name5" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+    <!-- プレイヤー6 -->
+    <div class="player_config" id="player_config6">
+
+      <div class="player_addition" onclick="contentSwitch(player_addition_button6, player_number6)">
+        <div class="player_addition_button">
+          <p id="player_addition_button6">追加</p>
+        </div>
+        
+        <div class="player_number_addition">
+          <p id="player_number6">⑥</p>
+        </div>
+      </div>
+ 
+      <div class="player_name_addition">
+        <input id="player_name6" type="text" placeholder="最大6文字" maxlength="6">
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer_button">
+    <a href="./top_page.html" id="back_button">戻る</a>
+    <a href="./behaviour_config_page.html" id="next_button">次へ</a>
+  </div>
+</footer>
+
+
+<script>
+  
+  $("#next_button").on("click", function(){
+    let input1 = document.getElementById("player_name1").value;
+    let input2 = document.getElementById("player_name2").value;
+    let input3 = document.getElementById("player_name3").value;
+    let input4 = document.getElementById("player_name4").value;
+    let input5 = document.getElementById("player_name5").value;
+    let input6 = document.getElementById("player_name6").value;
+    
+    localStorage.setItem("player_name1", input1);
+    localStorage.setItem("player_name2", input2);
+    localStorage.setItem("player_name3", input3);
+    localStorage.setItem("player_name4", input4);
+    localStorage.setItem("player_name5", input5);
+    localStorage.setItem("player_name6", input6);
+    
+  });
+
+</script>
+</body>
+</html>
