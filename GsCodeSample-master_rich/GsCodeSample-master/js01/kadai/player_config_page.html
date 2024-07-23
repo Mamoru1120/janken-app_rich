@@ -9,6 +9,9 @@
 <title>みんなでじゃんけんゲーム</title>
 </head>
 <body>
+  <audio src="./audio/MusMus-BGM-171.mp3" autoplay loop>
+    あなたのブラウザーは <code>audio</code>要素をサポートしていません。
+  </audio>
 
 <header>
   <p>追加を押して、プレイヤーの名前を入力してね</p>
@@ -128,7 +131,7 @@
 
 
 <script>
-  
+
   $("#next_button").on("click", function(){
     let input1 = document.getElementById("player_name1").value;
     let input2 = document.getElementById("player_name2").value;

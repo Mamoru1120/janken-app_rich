@@ -16,6 +16,12 @@
 
 <body>
 
+  <audio id="audio" src="./audio/MusMus-BGM-171.mp3" autoplay loop>
+    あなたのブラウザーは <code>audio</code>要素をサポートしていません。
+  </audio>
+
+ 
+
 <main>
   <!-- アプリタイトル -->
   <div id="app_title">
@@ -33,7 +39,8 @@
     <div id="content_of_config"> 
       <div id="config">
         <p id="BGM_sound">BGM音量</p>
-        <input type="range">
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="0.5">
+        <span id="vol_range">0.5</span>
       </div>
 
       <!-- <div> -->
@@ -41,15 +48,23 @@
       <!-- </div> -->
     </div>
   </div>
-    
-  
+
 </main>
 
 <script>
+  // ボリューム設定
+  let ad = document.getElementById("audio");
+  let elem_volume = document.getElementById("volume");
+  let elem_range = document.getElementById("vol_range");
 
-  
- 
-  
+  ad.volume = elem_volume.value;  // 初期値設定
+
+  // ボリューム変更時
+  elem_volume.addEventListener("change", function(){
+    ad.volume = elem_volume.value;
+    elem_range.textContent = elem_volume.value;
+    localStorage.setItem("audio", elem_volume);
+  }, false);
 </script>
 </body>
 </html>
